@@ -14,12 +14,12 @@ spec:
     spec:
       containers:
         - name: api-food-payments
-          image: postechf57/pos-tech-g57-app-users:latest
+          image: postechf57/pos-tech-g57-app-payments:latest
           ports:
             - containerPort: 8080
           envFrom:
             - configMapRef:
-                name: api-config
+                name: api-config-payments
             - secretRef:
                 name: api-secret
           resources:

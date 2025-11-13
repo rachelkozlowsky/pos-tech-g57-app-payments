@@ -2,7 +2,7 @@ spring:
   profiles:
     active: ${ENVIRONMENT_PROFILE_VALUE:prd}
   application:
-    name: api-food
+    name: api-food-payments
     payment-integration:
       host1: ${PAYMENT_INTEGRATION_HOST:https://api.mercadopago.com}
       ENVIRONMENT_PROFILE_DEV_NAME: des

@@ -10,9 +10,9 @@
         <relativePath/>
     </parent>
     <groupId>br.com.five.seven.food</groupId>
-    <artifactId>api-food</artifactId>
+    <artifactId>api-food-payments</artifactId>
     <version>0.0.1</version>
-    <name>api-food</name>
+    <name>api-food-payments</name>
     <description>Payment Application</description>
     <properties>
         <java.version>21</java.version>
