@@ -161,5 +161,5 @@ Este repositório inclui `mvnw` para builds reprodutíveis. Se desejar, podemos 
 Licença: verifique o arquivo `LICENSE` (se presente) no repositório.
 
 ---
-Atualizado para refletir os recursos deste projeto (serviço de pagamentos).
+
 
