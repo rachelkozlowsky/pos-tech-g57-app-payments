@@ -4,11 +4,11 @@ spring:
     payment-integration:
       host1: http://localhost:8101
     orders-client:
-      host1: http://localhost:8083
+      host1: http://localhost:8010
     users-client:
-      host1: http://localhost:8082
+      host1: http://localhost:8091
 server:
-  port: 8080
+  port: 8090
 
 logging:
   level:
