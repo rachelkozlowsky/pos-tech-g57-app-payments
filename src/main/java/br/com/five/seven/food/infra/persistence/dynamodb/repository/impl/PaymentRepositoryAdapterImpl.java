@@ -4,8 +4,8 @@ import br.com.five.seven.food.infra.persistence.dynamodb.repository.PaymentOrder
 import br.com.five.seven.food.rest.mapper.PaymentMapper;
 import br.com.five.seven.food.infra.persistence.dynamodb.entity.PaymentOrderEntity;
 import br.com.five.seven.food.domain.model.PaymentOrder;
+import br.com.five.seven.food.application.ports.out.IPaymentRepositoryOut;
 import br.com.five.seven.food.domain.enums.PaymentStatus;
-import br.com.five.seven.food.domain.repository.IPaymentRepository;
 import br.com.five.seven.food.infra.exceptions.PaymentOrderNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class PaymentRepositoryAdapterImpl implements IPaymentRepository {
+public class PaymentRepositoryAdapterImpl implements IPaymentRepositoryOut {
 
     private final PaymentOrderDynamoDBRepository paymentRepository;
     private final PaymentMapper paymentOrderMapper;

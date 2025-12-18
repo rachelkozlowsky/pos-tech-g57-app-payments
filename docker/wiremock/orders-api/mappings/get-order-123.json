@@ -1,0 +1,83 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "GET",
+    "url": "/v1/orders/123"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "id": 123,
+      "title": "Pedido Especial 123",
+      "description": "Pedido completo com combo premium",
+      "orderStatus": "READY",
+      "client": "joao.silva@email.com",
+      "combo": {
+        "id": 10,
+        "snack": [
+          {
+            "product": {
+              "id": 1,
+              "name": "Hamburguer Artesanal",
+              "description": "Hamburguer 200g com queijo e bacon",
+              "price": 25.90,
+              "active": true,
+              "images": [],
+              "category": {"id": 1, "name": "Lanches"}
+            },
+            "quantity": 1
+          }
+        ],
+        "garnish": [
+          {
+            "product": {
+              "id": 2,
+              "name": "Batata Rústica",
+              "description": "Porção 300g",
+              "price": 12.00,
+              "active": true,
+              "images": [],
+              "category": {"id": 2, "name": "Acompanhamentos"}
+            },
+            "quantity": 1
+          }
+        ],
+        "drink": [
+          {
+            "product": {
+              "id": 3,
+              "name": "Suco Natural",
+              "description": "Laranja 500ml",
+              "price": 10.00,
+              "active": true,
+              "images": [],
+              "category": {"id": 3, "name": "Bebidas"}
+            },
+            "quantity": 1
+          }
+        ],
+        "dessert": [
+          {
+            "product": {
+              "id": 4,
+              "name": "Sorvete",
+              "description": "Bola de sorvete de chocolate",
+              "price": 12.00,
+              "active": true,
+              "images": [],
+              "category": {"id": 4, "name": "Sobremesas"}
+            },
+            "quantity": 1
+          }
+        ]
+      },
+      "totalAmount": 59.90,
+      "receivedAt": "09/12/2025 18:30:00",
+      "updatedAt": "09/12/2025 18:35:00",
+      "remainingTime": "5 minutos"
+    }
+  }
+}

@@ -6,9 +6,10 @@ import java.time.LocalDateTime;
 import br.com.five.seven.food.rest.mapper.PaymentMapper;
 import br.com.five.seven.food.rest.response.PaymentOrderResponse;
 import org.springframework.stereotype.Component;
-import br.com.five.seven.food.infra.payment.mercadopago.payload.MercadoPagoPayer;
-import br.com.five.seven.food.infra.payment.mercadopago.payload.PaymentMercadoPagoGetResponse;
-import br.com.five.seven.food.infra.payment.mercadopago.payload.PaymentMercadoPagoRequest;
+
+import br.com.five.seven.food.infra.clients.payment.payload.MercadoPagoPayer;
+import br.com.five.seven.food.infra.clients.payment.payload.PaymentMercadoPagoGetResponse;
+import br.com.five.seven.food.infra.clients.payment.payload.PaymentMercadoPagoRequest;
 import br.com.five.seven.food.infra.persistence.dynamodb.entity.PaymentOrderEntity;
 import br.com.five.seven.food.domain.model.PaymentOrder;
 import br.com.five.seven.food.domain.enums.PaymentOption;

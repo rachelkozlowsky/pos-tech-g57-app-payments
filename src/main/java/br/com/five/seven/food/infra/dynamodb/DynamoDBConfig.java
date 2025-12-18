@@ -17,10 +17,7 @@ import java.net.URI;
 @Slf4j
 @Configuration
 public class DynamoDBConfig {
-
-    @Value("${aws.dynamodb.endpoint}")
-    private String amazonDynamoDBEndpoint;
-
+    
     @Value("${aws.region:us-east-1}")
     private String amazonAWSRegion;
 
@@ -31,8 +28,13 @@ public class DynamoDBConfig {
     private String amazonAWSSecretKey;
 
     @Bean
-    @Profile("!des")
+    @Profile("prod")
     public DynamoDbClient dynamoDbClient() {
+        log.info("========================================");
+        log.info("Using DynamoDB PRODUCTION configuration");
+        log.info("Region: {}", amazonAWSRegion);
+        log.info("========================================");
+        
         return DynamoDbClient.builder()
                 .region(Region.of(amazonAWSRegion))
                 .credentialsProvider(StaticCredentialsProvider.create(
@@ -41,19 +43,40 @@ public class DynamoDBConfig {
     }
 
     @Bean
-    @Profile("des")
-    public DynamoDbClient dynamoDbClientLocal() {
-        log.info("Using DynamoDB local");
-        return DynamoDbClient.builder()
+    @Profile("local")
+    public DynamoDbClient dynamoDbClientLocal(@Value("${aws.dynamodb.endpoint}") String amazonDynamoDBEndpoint) {
+        log.info("========================================");
+        log.info("Using DynamoDB LOCAL configuration");
+        log.info("Endpoint: {}", amazonDynamoDBEndpoint);
+        log.info("Region: {}", amazonAWSRegion);
+        log.info("========================================");
+        
+        DynamoDbClient client = DynamoDbClient.builder()
                 .endpointOverride(URI.create(amazonDynamoDBEndpoint))
                 .region(Region.of(amazonAWSRegion))
                 .credentialsProvider(StaticCredentialsProvider.create(
                         AwsBasicCredentials.create(amazonAWSAccessKey, amazonAWSSecretKey)))
                 .build();
+        
+        try {
+            log.info("Testing DynamoDB connection...");
+            var tables = client.listTables();
+            log.info("Connected successfully! Available tables: {}", tables.tableNames());
+            
+            // Test describe table
+            var describeResponse = client.describeTable(r -> r.tableName("PaymentOrderEntity"));
+            log.info("Table PaymentOrderEntity status: {}", describeResponse.table().tableStatus());
+        } catch (Exception e) {
+            log.error("Failed to connect to DynamoDB: {}", e.getMessage(), e);
+        }
+        
+        return client;
     }
 
     @Bean
     public DynamoDbEnhancedClient dynamoDbEnhancedClient(DynamoDbClient dynamoDbClient) {
+        log.info("Creating DynamoDbEnhancedClient with custom DynamoDbClient");
+        log.info("DynamoDbClient class: {}", dynamoDbClient.getClass().getName());
         return DynamoDbEnhancedClient.builder()
                 .dynamoDbClient(dynamoDbClient)
                 .build();
@@ -61,6 +84,9 @@ public class DynamoDBConfig {
 
     @Bean
     public DynamoDbTemplate dynamoDbTemplate(DynamoDbEnhancedClient dynamoDbEnhancedClient) {
-        return new DynamoDbTemplate(dynamoDbEnhancedClient);
+        log.info("Creating DynamoDbTemplate with EnhancedClient");
+        DynamoDbTemplate template = new DynamoDbTemplate(dynamoDbEnhancedClient);
+        log.info("DynamoDbTemplate created successfully");
+        return template;
     }
 }

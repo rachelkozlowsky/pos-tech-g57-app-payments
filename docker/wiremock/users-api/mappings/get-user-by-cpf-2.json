@@ -1,0 +1,25 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "GET",
+    "urlPathPattern": "/v1/users",
+    "queryParameters": {
+      "cpf": {
+        "equalTo": "98765432100"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "id": "user-002",
+      "cpf": "98765432100",
+      "name": "Maria Santos",
+      "email": "maria.santos@email.com",
+      "phone": "(11) 91234-5678"
+    }
+  }
+}

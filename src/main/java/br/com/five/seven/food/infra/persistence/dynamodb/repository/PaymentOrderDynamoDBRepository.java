@@ -2,9 +2,12 @@ package br.com.five.seven.food.infra.persistence.dynamodb.repository;
 
 import br.com.five.seven.food.infra.persistence.dynamodb.entity.PaymentOrderEntity;
 import br.com.five.seven.food.domain.enums.PaymentStatus;
-import io.awspring.cloud.dynamodb.DynamoDbTemplate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
+import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryEnhancedRequest;
 
@@ -12,27 +15,36 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Repository
 public class PaymentOrderDynamoDBRepository {
 
-    private final DynamoDbTemplate dynamoDbTemplate;
+    private final DynamoDbTable<PaymentOrderEntity> table;
     private static final String ORDER_ID_INDEX = "orderId-index";
 
-    public PaymentOrderDynamoDBRepository(DynamoDbTemplate dynamoDbTemplate) {
-        this.dynamoDbTemplate = dynamoDbTemplate;
+    public PaymentOrderDynamoDBRepository(DynamoDbEnhancedClient dynamoDbEnhancedClient) {
+        this.table = dynamoDbEnhancedClient.table("PaymentOrderEntity", TableSchema.fromBean(PaymentOrderEntity.class));
+        log.info("PaymentOrderDynamoDBRepository initialized with DynamoDbTable");
     }
 
     public PaymentOrderEntity save(PaymentOrderEntity paymentOrder) {
-        dynamoDbTemplate.save(paymentOrder);
+        table.putItem(paymentOrder);
         return paymentOrder;
     }
 
     public Optional<PaymentOrderEntity> findById(String id) {
-        return Optional.ofNullable(dynamoDbTemplate.load(Key.builder().partitionValue(id).build(), PaymentOrderEntity.class));
+        log.debug("Finding payment by id: {}", id);
+        try {
+            PaymentOrderEntity result = table.getItem(Key.builder().partitionValue(id).build());
+            return Optional.ofNullable(result);
+        } catch (Exception e) {
+            log.error("Error finding payment by id {}: {}", id, e.getMessage(), e);
+            throw e;
+        }
     }
 
     public List<PaymentOrderEntity> findAll() {
-        return dynamoDbTemplate.scanAll(PaymentOrderEntity.class).items().stream().toList();
+        return table.scan().items().stream().toList();
     }
 
     public List<PaymentOrderEntity> findByOrderId(String orderId) {
@@ -40,9 +52,8 @@ public class PaymentOrderDynamoDBRepository {
                 .queryConditional(QueryConditional.keyEqualTo(Key.builder().partitionValue(orderId).build()))
                 .build();
 
-        return dynamoDbTemplate.query(request, PaymentOrderEntity.class, ORDER_ID_INDEX)
-                .items()
-                .stream()
+        return table.index(ORDER_ID_INDEX).query(request).stream()
+                .flatMap(page -> page.items().stream())
                 .toList();
     }
 
@@ -59,11 +70,11 @@ public class PaymentOrderDynamoDBRepository {
     }
 
     public void delete(PaymentOrderEntity paymentOrder) {
-        dynamoDbTemplate.delete(paymentOrder);
+        table.deleteItem(paymentOrder);
     }
 
     public void deleteById(String id) {
-        findById(id).ifPresent(dynamoDbTemplate::delete);
+        findById(id).ifPresent(table::deleteItem);
     }
 
     public boolean existsById(String id) {

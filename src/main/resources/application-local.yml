@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: api-food-payments
+    payment-integration:
+      host1: http://localhost:8101
+    orders-client:
+      host1: http://localhost:8010
+    users-client:
+      host1: http://localhost:8091
+server:
+  port: 8090
+
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+    br.com.five.seven.food: DEBUG
+
+# AWS Configuration
+aws:
+  region: us-east-1
+  accesskey: dummykey
+  secretkey: dummysecret
+  dynamodb:
+    endpoint: http://localhost:8000
+
+# Security Configuration
+security:
+  jwt:
+    secret: default-jwt-secret-key-for-dev-only
+
+# API Documentation
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+
+user: admin
+pass: admin

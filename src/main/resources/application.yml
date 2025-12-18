@@ -1,14 +1,12 @@
 spring:
-  profiles:
-    active: ${ENVIRONMENT_PROFILE_VALUE:prd}
   application:
     name: api-food-payments
     payment-integration:
       host1: ${PAYMENT_INTEGRATION_HOST:https://api.mercadopago.com}
-      ENVIRONMENT_PROFILE_DEV_NAME: des
-      ENVIRONMENT_PROFILE_PROD_NAME: prd
     orders-client:
       host1: ${ORDERS_CLIENT_HOST:http://api-food-orders-service.orders}
+    users-client:
+      host1: ${USERS_CLIENT_HOST:http://api-food-users-service.users}
 server:
   port: ${SERVER_PORT:8080}
 
@@ -23,8 +21,6 @@ aws:
   region: ${AWS_REGION:us-east-1}
   accesskey: ${AWS_ACCESS_KEY:dummykey}
   secretkey: ${AWS_SECRET_KEY:dummysecret}
-  dynamodb:
-    endpoint: ${AWS_DYNAMODB_ENDPOINT:http://dynamodb-local:8000} # Empty default for production use
 
 # Security Configuration
 security:

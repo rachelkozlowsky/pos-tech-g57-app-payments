@@ -3,6 +3,7 @@ package br.com.five.seven.food.infra.init;
 import br.com.five.seven.food.infra.persistence.dynamodb.entity.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.IndexMetadata;
@@ -14,6 +15,7 @@ import software.amazon.awssdk.services.dynamodb.waiters.DynamoDbWaiter;
 
 @Slf4j
 @Component
+@Profile("!local")
 public class DataInitializer implements CommandLineRunner {
 
     private final DynamoDbClient dynamoDbClient;
@@ -53,7 +55,7 @@ public class DataInitializer implements CommandLineRunner {
         }
     }
 
-    private EnhancedGlobalSecondaryIndex buildEnhancedGlobalSecondaryIndex(BeanTableSchema beanTableSchema, Long readCapacity, Long writeCapacity) {
+    private <T> EnhancedGlobalSecondaryIndex buildEnhancedGlobalSecondaryIndex(BeanTableSchema<T> beanTableSchema, Long readCapacity, Long writeCapacity) {
         return beanTableSchema.tableMetadata().indices().stream()
                 .map(IndexMetadata::name)
                 .filter(name -> !name.contains("$"))

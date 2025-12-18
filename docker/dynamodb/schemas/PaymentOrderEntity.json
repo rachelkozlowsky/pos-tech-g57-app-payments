@@ -1,0 +1,41 @@
+{
+  "TableName": "PaymentOrderEntity",
+  "KeySchema": [
+    {
+      "AttributeName": "id",
+      "KeyType": "HASH"
+    }
+  ],
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "id",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "orderId",
+      "AttributeType": "S"
+    }
+  ],
+  "GlobalSecondaryIndexes": [
+    {
+      "IndexName": "orderId-index",
+      "KeySchema": [
+        {
+          "AttributeName": "orderId",
+          "KeyType": "HASH"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "ALL"
+      },
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 5,
+        "WriteCapacityUnits": 5
+      }
+    }
+  ],
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 5
+  }
+}

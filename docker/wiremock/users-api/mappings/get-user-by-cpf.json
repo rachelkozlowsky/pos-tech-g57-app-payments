@@ -1,0 +1,25 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "GET",
+    "urlPathPattern": "/v1/users",
+    "queryParameters": {
+      "cpf": {
+        "equalTo": "12345678900"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "id": "user-001",
+      "cpf": "12345678900",
+      "name": "João Silva",
+      "email": "joao.silva@email.com",
+      "phone": "(11) 98765-4321"
+    }
+  }
+}

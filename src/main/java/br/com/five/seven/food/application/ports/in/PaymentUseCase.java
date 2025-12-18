@@ -17,4 +17,9 @@ public interface PaymentUseCase {
     List<PaymentOrder> findAll(int page, int size);
 
     PaymentOrder createPaymentQRCodePix(String email, String orderId, BigDecimal totalAmount);
+
+    BigDecimal getAmountByOrderId(String orderId);
+
+    String getEmailByUserCpf(String cpf);
+
 }

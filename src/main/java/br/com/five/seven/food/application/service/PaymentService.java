@@ -1,13 +1,16 @@
 package br.com.five.seven.food.application.service;
 
-import br.com.five.seven.food.domain.repository.*;
 import br.com.five.seven.food.rest.request.NotificationRequest;
 import br.com.five.seven.food.domain.model.PaymentOrder;
 import br.com.five.seven.food.domain.enums.PaymentOption;
 import br.com.five.seven.food.application.ports.in.PaymentNotificationUseCase;
 import br.com.five.seven.food.application.ports.in.PaymentUseCase;
+import br.com.five.seven.food.application.ports.out.IPaymentClientOut;
+import br.com.five.seven.food.application.ports.out.IPaymentRepositoryOut;
+import br.com.five.seven.food.application.ports.out.OrdersClientOut;
+import br.com.five.seven.food.application.ports.out.UsersClientOut;
 import br.com.five.seven.food.infra.exceptions.PaymentOrderAlreadyApprovedException;
-
+import br.com.five.seven.food.infra.exceptions.PaymentOrderNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,23 +19,31 @@ import java.util.stream.Stream;
 public class PaymentService
         implements PaymentUseCase, PaymentNotificationUseCase {
 
-    private final IPaymentRepository paymentRepositoryOut;
-    private final IPaymentIntegrationRepository paymentIntegrationServiceOut;
-    private final IPaymentCheckoutRepository paymentCkeckoutServiceOut;
+    private final IPaymentRepositoryOut paymentRepositoryOut;
+    private final IPaymentClientOut paymentIntegrationServiceOut;
+    private final OrdersClientOut ordersClientOut;
+    private final UsersClientOut usersClientOut;
+
+    private final static String DEFAULT_EMAIL = "postechg57@gmail.com";
 
     public PaymentService(
-            IPaymentRepository paymentRepositoryOut,
-            IPaymentIntegrationRepository paymentIntegrationServiceOut,
-            IPaymentCheckoutRepository paymentCkeckoutServiceOut) {
-
+            IPaymentRepositoryOut paymentRepositoryOut,
+            IPaymentClientOut paymentIntegrationServiceOut,
+            OrdersClientOut ordersClientOut,
+            UsersClientOut usersClientOut) {
         this.paymentRepositoryOut = paymentRepositoryOut;
         this.paymentIntegrationServiceOut = paymentIntegrationServiceOut;
-        this.paymentCkeckoutServiceOut = paymentCkeckoutServiceOut;
+        this.ordersClientOut = ordersClientOut;
+        this.usersClientOut = usersClientOut;
     }
 
     @Override
     public PaymentOrder findById(String PaymentId) {
-        return paymentRepositoryOut.findById(PaymentId);
+        PaymentOrder paymentOrder = paymentRepositoryOut.findByorderId(PaymentId);
+        if (paymentOrder == null) {
+            throw new PaymentOrderNotFoundException(String.format("Payment not found with order id: %s", PaymentId));
+        }
+        return paymentOrder;
     }
 
     @Override
@@ -61,7 +72,8 @@ public class PaymentService
     public PaymentOrder createPaymentQRCodePix(String email, String orderId, BigDecimal totalAmount) {
 
         if (paymentRepositoryOut.isPaymentOrderAprovedByOrderId(orderId)) {
-            throw new PaymentOrderAlreadyApprovedException(String.format("Payment with status approved for order %s", orderId));
+            throw new PaymentOrderAlreadyApprovedException(
+                    String.format("Payment with status approved for order %s", orderId));
         }
 
         if (paymentRepositoryOut.existsByorderId(orderId)) {
@@ -80,16 +92,29 @@ public class PaymentService
     @Override
     public void paymentNotification(NotificationRequest event) {
         if (event.getType().equals("payment") && event.getAction().equals("payment.updated")) {
-            var paymentOrderStatus = paymentCkeckoutServiceOut.getPaymentStatus(event.getData().id());
+            var paymentOrderStatus = paymentIntegrationServiceOut.getPaymentStatus(event.getData().id());
 
             var paymentOrder = paymentRepositoryOut
                     .findByintegrationId(event.getData().id());
             paymentOrder.setStatus(paymentOrderStatus);
             paymentOrder.setLastUpdate(LocalDateTime.now().toString());
 
-            // var paymentOrderUpdated = paymentRepositoryOut.update(paymentOrder);
-
-            // TODO: Avisar API Principal
+            paymentRepositoryOut.update(paymentOrder);
         }
+    }
+
+    @Override
+    public BigDecimal getAmountByOrderId(String orderId) {
+        return ordersClientOut.getAmountByOrderId(orderId);
+    }
+
+    @Override
+    public String getEmailByUserCpf(String cpf) {
+        var userResponse = usersClientOut.getUserByCpf(cpf);
+        if (userResponse == null) {
+            return PaymentService.DEFAULT_EMAIL;
+        }
+
+        return userResponse.getEmail();
     }
 }

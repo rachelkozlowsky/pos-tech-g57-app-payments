@@ -1,0 +1,38 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "GET",
+    "urlPathPattern": "/v1/payments/([0-9]+)"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "id": "{{request.pathSegments.[2]}}",
+      "status": "approved",
+      "status_detail": "accredited",
+      "date_created": "2025-12-09T22:30:00.000-03:00",
+      "date_approved": "2025-12-09T22:30:15.000-03:00",
+      "external_reference": "{{randomValue length=36 type='UUID'}}",
+      "transaction_amount": 100.00,
+      "amount": 100.00,
+      "payment_method": {
+        "id": "pix",
+        "type": "bank_transfer",
+        "issuer_id": null
+      },
+      "payer": {
+        "email": "test@test.com"
+      },
+      "point_of_interaction": {
+        "transaction_data": {
+          "qr_code": "00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff6b2f8cd520400005303986540510.005802BR5913Teste",
+          "qr_code_base64": "iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQAQAAAACoxAthAAADe0lEQVR42u3bS27jMAwA0P//6XRhILhIL2ygQAaCgUKRaVuOZUmW9FgZTLfNkH6PkmxJ7p8="
+        }
+      }
+    },
+    "transformers": ["response-template"]
+  }
+}

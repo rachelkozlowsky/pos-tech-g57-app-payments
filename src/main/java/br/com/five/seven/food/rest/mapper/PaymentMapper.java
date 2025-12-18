@@ -1,8 +1,8 @@
 package br.com.five.seven.food.rest.mapper;
 
 import br.com.five.seven.food.rest.response.PaymentOrderResponse;
-import br.com.five.seven.food.infra.payment.mercadopago.payload.PaymentMercadoPagoGetResponse;
-import br.com.five.seven.food.infra.payment.mercadopago.payload.PaymentMercadoPagoRequest;
+import br.com.five.seven.food.infra.clients.payment.payload.PaymentMercadoPagoGetResponse;
+import br.com.five.seven.food.infra.clients.payment.payload.PaymentMercadoPagoRequest;
 import br.com.five.seven.food.infra.persistence.dynamodb.entity.PaymentOrderEntity;
 import br.com.five.seven.food.domain.model.PaymentOrder;
 

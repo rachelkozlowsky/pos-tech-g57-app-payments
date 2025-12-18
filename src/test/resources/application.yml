@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: api-food-payments
+    payment-integration:
+      host1: http://localhost:8101
+    orders-client:
+      host1: http://localhost:8083
+    users-client:
+      host1: http://localhost:8082
+
+# AWS Configuration
+aws:
+  region: us-east-1
+  accesskey: dummykey
+  secretkey: dummysecret
+  dynamodb:
+    endpoint: http://localhost:8000
+
+# Security Configuration  
+security:
+  jwt:
+    secret: test-jwt-secret-key
+
+# MercadoPago Configuration
+mercadopago:
+  token: test-token

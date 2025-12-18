@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-@Operation(summary = "get payment by id", description = "Retrieve a specific payment by id.")
+@Operation(summary = "get payment by id", description = "Retrieve a specific payment by correlation id (orders id).")
 @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Successfully retrieved the payment"),
         @ApiResponse(responseCode = "404", description = "Payment not found"),

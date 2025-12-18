@@ -1,0 +1,57 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "GET",
+    "url": "/v1/orders/456"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "id": 456,
+      "title": "Pedido Express 456",
+      "description": "Pedido rápido - Lanche simples",
+      "orderStatus": "IN_PREPARATION",
+      "client": "maria.santos@email.com",
+      "combo": {
+        "id": 5,
+        "snack": [
+          {
+            "product": {
+              "id": 10,
+              "name": "Hamburguer Clássico",
+              "description": "Hamburguer 150g tradicional",
+              "price": 18.90,
+              "active": true,
+              "images": [],
+              "category": {"id": 1, "name": "Lanches"}
+            },
+            "quantity": 1
+          }
+        ],
+        "garnish": [],
+        "drink": [
+          {
+            "product": {
+              "id": 11,
+              "name": "Refrigerante",
+              "description": "Lata 350ml",
+              "price": 7.00,
+              "active": true,
+              "images": [],
+              "category": {"id": 3, "name": "Bebidas"}
+            },
+            "quantity": 1
+          }
+        ],
+        "dessert": []
+      },
+      "totalAmount": 25.90,
+      "receivedAt": "09/12/2025 19:15:00",
+      "updatedAt": "09/12/2025 19:20:00",
+      "remainingTime": "10 minutos"
+    }
+  }
+}

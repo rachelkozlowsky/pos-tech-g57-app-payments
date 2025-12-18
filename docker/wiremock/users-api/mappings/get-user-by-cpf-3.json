@@ -1,0 +1,25 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "GET",
+    "urlPathPattern": "/v1/users",
+    "queryParameters": {
+      "cpf": {
+        "equalTo": "11122233344"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "id": "user-003",
+      "cpf": "11122233344",
+      "name": "Pedro Oliveira",
+      "email": "pedro.oliveira@email.com",
+      "phone": "(11) 99876-5432"
+    }
+  }
+}
