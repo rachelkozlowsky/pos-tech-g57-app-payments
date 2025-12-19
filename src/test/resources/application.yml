@@ -7,6 +7,17 @@ spring:
       host1: http://localhost:8083
     users-client:
       host1: http://localhost:8082
+  cloud:
+    aws:
+      region:
+        static: us-east-1
+      credentials:
+        access-key: dummykey
+        secret-key: dummysecret
+      dynamodb:
+        endpoint: http://localhost:8000
+  profiles:
+    active: local
 
 # AWS Configuration
 aws:
