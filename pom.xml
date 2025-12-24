@@ -11,7 +11,7 @@
     </parent>
     <groupId>br.com.five.seven.food</groupId>
     <artifactId>api-food-payments</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.23</version>
     <name>api-food-payments</name>
     <description>Payment Application</description>
     <properties>
@@ -23,7 +23,29 @@
         <sonar.exclusions>
             **/TechFoodFiveSevenApplication*,**/devcontroller/**/*.*,**/utils/*,**/domain/**/*.*,**/entity/**/*.*,**/*Config/*,**/infra/**/*.*,**/*Request*,**/*Response*,**Handler*,*pom.xml
         </sonar.exclusions>
+        <spring-cloud.version>2024.0.0</spring-cloud.version>
+        <spring-cloud-aws.version>3.0.3</spring-cloud-aws.version>
     </properties>
+    
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.awspring.cloud</groupId>
+                <artifactId>spring-cloud-aws-dependencies</artifactId>
+                <version>${spring-cloud-aws.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -33,6 +55,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.awspring.cloud</groupId>
+            <artifactId>spring-cloud-aws-secrets-manager</artifactId>
+            <version>3.4.2</version>
+        </dependency>
+
+        <!-- AWS STS for IRSA (Web Identity Token) support -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>sts</artifactId>
         </dependency>
 
         <dependency>
@@ -52,7 +86,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <version>4.2.1</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.validator</groupId>
@@ -104,15 +137,7 @@
         <!-- Spring Cloud AWS DynamoDB Dependencies -->
         <dependency>
             <groupId>io.awspring.cloud</groupId>
-            <artifactId>spring-cloud-aws-dependencies</artifactId>
-            <version>3.0.3</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.awspring.cloud</groupId>
             <artifactId>spring-cloud-aws-starter-dynamodb</artifactId>
-            <version>3.0.3</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>
