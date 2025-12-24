@@ -1,14 +1,15 @@
 spring:
+  profiles:
+    active: ${ENVIRONMENT_PROFILE_VALUE:local}
   application:
     name: api-food-payments
     payment-integration:
       host1: ${PAYMENT_INTEGRATION_HOST:https://api.mercadopago.com}
+      token: ${JWT_TOKEN_PIX_APPLICATION_PAYMENT:defaulttoken}
     orders-client:
       host1: ${ORDERS_CLIENT_HOST:http://api-food-orders-service.orders}
     users-client:
       host1: ${USERS_CLIENT_HOST:http://api-food-users-service.users}
-server:
-  port: ${SERVER_PORT:8080}
 
 logging:
   level:
@@ -18,14 +19,9 @@ logging:
 
 # AWS Configuration
 aws:
-  region: ${AWS_REGION:us-east-1}
-  accesskey: ${AWS_ACCESS_KEY:dummykey}
-  secretkey: ${AWS_SECRET_KEY:dummysecret}
-
-# Security Configuration
-security:
-  jwt:
-    secret: ${JWT_SECRET:default-jwt-secret-key-for-dev-only}
+  region: us-east-1
+  accesskey: dummykey
+  secretkey: dummysecret
 
 # API Documentation
 springdoc:
@@ -36,6 +32,3 @@ springdoc:
 
 user: ${ADMIN_USER:admin}
 pass: ${ADMIN_PASS:admin}
-
-mercadopago:
-  token: ${JWT_TOKEN_PIX_APPLICATION_PAYMENT:defaulttoken}

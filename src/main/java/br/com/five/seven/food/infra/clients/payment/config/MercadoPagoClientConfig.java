@@ -8,7 +8,7 @@ import feign.RequestInterceptor;
 @Configuration
 public class MercadoPagoClientConfig {
 
-    @Value("${mercadopago.token}")
+    @Value("${spring.application.payment-integration.token}")
     private String jwtToken;
 
     @Bean

@@ -23,7 +23,7 @@ public class PaymentOrderDynamoDBRepository {
     private static final String ORDER_ID_INDEX = "orderId-index";
 
     public PaymentOrderDynamoDBRepository(DynamoDbEnhancedClient dynamoDbEnhancedClient) {
-        this.table = dynamoDbEnhancedClient.table("PaymentOrderEntity", TableSchema.fromBean(PaymentOrderEntity.class));
+        this.table = dynamoDbEnhancedClient.table("payment_order_entity", TableSchema.fromBean(PaymentOrderEntity.class));
         log.info("PaymentOrderDynamoDBRepository initialized with DynamoDbTable");
     }
 

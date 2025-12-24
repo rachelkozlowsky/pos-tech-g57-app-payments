@@ -5,10 +5,6 @@ metadata:
   namespace: payments
 data:
   PAYMENT_INTEGRATION_HOST: "https://api.mercadopago.com/"
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: api-secret
-data: {}
-type: Opaque
+  SPRING_PROFILES_ACTIVE: "prd"
+  AWS_REGION: "us-east-1"
+
