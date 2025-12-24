@@ -1,12 +1,54 @@
 name: CD
 
 on:
+  repository_dispatch:
+    types: [deploy]
   workflow_dispatch: {}
 
+env:
+  AWS_REGION: "us-east-1"
+  
 jobs:
+  configure-api-secrets:
+    runs-on: ubuntu-latest
+    env:
+      SECRET_NAME: "production/payments2"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+    
+      - name: Setup AWS Secrets Manager
+        run: |
+          SECRET_VALUE='{"JWT_TOKEN_PIX_APPLICATION_PAYMENT":"${{ secrets.JWT_TOKEN_PIX_APPLICATION_PAYMENT }}"}'
+          
+          # Check if secret exists
+          if aws secretsmanager describe-secret --secret-id "$SECRET_NAME" 2>/dev/null; then
+            echo "Secret exists, updating..."
+            aws secretsmanager update-secret \
+              --secret-id "$SECRET_NAME" \
+              --secret-string "$SECRET_VALUE"
+          else
+            echo "Secret does not exist, creating..."
+            aws secretsmanager create-secret \
+              --name "$SECRET_NAME" \
+              --secret-string "$SECRET_VALUE"
+          fi
+          
+          echo "Secret $SECRET_NAME successfully configured in AWS Secrets Manager"
+      
   call-reusable-deploy-workflow:
+    needs: configure-api-secrets
     uses: rachelkozlowsky/nested-reusable-java-maven-eks/.github/workflows/deploy.yml@main
     with:
       cluster_name: "eks-postech-g57"
+      argo_app_name: "payments-api"
       namespace: "payments"
+      git_repo_url: "https://github.com/rachelkozlowsky/pos-tech-g57-app-payments"
     secrets: inherit

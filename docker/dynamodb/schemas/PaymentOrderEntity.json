@@ -1,5 +1,5 @@
 {
-  "TableName": "PaymentOrderEntity",
+  "TableName": "payment_order_entity",
   "KeySchema": [
     {
       "AttributeName": "id",

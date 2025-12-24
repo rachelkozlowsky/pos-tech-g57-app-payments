@@ -107,12 +107,16 @@ public class PaymentService
     public BigDecimal getAmountByOrderId(String orderId) {
         return ordersClientOut.getAmountByOrderId(orderId);
     }
-
+    
     @Override
     public String getEmailByUserCpf(String cpf) {
-        var userResponse = usersClientOut.getUserByCpf(cpf);
-        if (userResponse == null) {
+        if (cpf == null || cpf.isBlank()) {
             return PaymentService.DEFAULT_EMAIL;
+        }
+        var userResponse = usersClientOut.getUserByCpf(cpf);
+
+        if (userResponse == null) {
+            throw new IllegalArgumentException("Usuário não encontrado para o CPF: " + cpf);
         }
 
         return userResponse.getEmail();

@@ -244,13 +244,13 @@ class PaymentServiceTest {
     }
 
     @Test
-    void getEmailByUserCpf_ShouldReturnDefaultEmail_WhenUserNotFound() {
+    void getEmailByUserCpf_ShouldThrowException_WhenUserNotFound() {
         when(usersClientOut.getUserByCpf("00000000000")).thenReturn(null);
 
-        String email = paymentService.getEmailByUserCpf("00000000000");
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, 
+            () -> paymentService.getEmailByUserCpf("00000000000"));
 
-        assertNotNull(email);
-        assertEquals("postechg57@gmail.com", email);
+        assertEquals("Usuário não encontrado para o CPF: 00000000000", exception.getMessage());
         verify(usersClientOut).getUserByCpf("00000000000");
     }
 }
