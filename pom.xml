@@ -11,7 +11,7 @@
     </parent>
     <groupId>br.com.five.seven.food</groupId>
     <artifactId>api-food-payments</artifactId>
-    <version>0.0.28</version>
+    <version>0.0.39</version>
     <name>api-food-payments</name>
     <description>Payment Application</description>
     <properties>
